@@ -55,6 +55,7 @@ BETTER DOCUMENTATION
 
 
 CODE ORGANIZATION
+    - Before anything else, almost always all code goes within src/, a directory for all source code, and usually there is a separate one for data/ as well as logs/ and testing/
     - You NEED to organize the code more succintly, and there are different ways to do it.
     - My approach, I like to make lots of separate files/modules/libraries for my codebase and I import them (in the standard way) together in JupyterLab.
     - That way, the notebook is mostly data science output or drivers to get results rather than a bunch of code all over the place.
