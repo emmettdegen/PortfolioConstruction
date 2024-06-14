@@ -1,0 +1,92 @@
+EMMETT / MrPickles5:
+- Hope you don't take these the wrong way, just trying to help my boy get where he deserves to be.
+- Keep in mind that you know finance more than me, but I know Python more than you.
+- Being able to take critical feedback is a vital and underrated skill.
+    * Literally no one under the age of 35 is good at it, I'm working on it too.
+    * Being on the dishing-out side is new to me.
+    * I promise there is 0% malice or condescension, if you feel any of that then I need to do a better job.
+- The two areas of critique I have for you are in regards to the Python, not what you're doing with it (i.e. SYNTAX/SEMANTICS vs. LOGIC)
+- My biggest worry for you looking through your codebase as a Python programmer is you not following industry standards in regards to structuring your project.
+    * This can be sending a bad signal to potential employers or anyone who looks through your GitHub.
+    * Theres reasons why things are done certain ways, if you ignore these methods it heavily implies you do not understand why things are done.
+- So the two areas I'm flagging for now are DOCUMENTATION and ORGANIZATION.
+
+! A good way to improve both of these is to just browse codebases !
+! Go on Hacker News and look at any links that start with "Show HN:", many are Python and will teach you A LOT !
+! Hacker News: https://news.ycombinator.com/ !
+
+BETTER DOCUMENTATION
+    - This will mostly consist of comments above lines of code that are not abundantly clear, and definetly keep in mind: !!!!! no one is in your head !!!!!
+    - Readable code is way more impressive than clever code / shorter code
+        * It indicates you understand how development actually works (collaboratively)
+        * It shows you are not being some smarmy show off (which was me for a while with clever code)
+        * It's annoying, but make variable names longer; use text editor shortcuts if you dont want to type but they need to be clearer.
+        * Programming languages are quite optimized, varaible name length has literally 0 effect on run time or memory
+        * Heres an example of something I had an issue with:
+
+            #Federal Reserve Bank of St. Louis API to use current 10-Year Treasury as Risk-Free Rate
+            # fred = Fred(api_key=)
+            # rf = (fred.get_series_latest_release('GS10') / 100).iloc[-1]
+            rf = 0.0421
+
+        * First off, why the commented out API and instead a manual declaration, similar to excel you dont want to hard code values like this unless you have to.
+        * If you cant get the API to work and need to just set it manually, don't make it abundantly obvious you couldn't get the API to work (delete the code, don't comment it out).
+
+        * More importantly, at least rename it: `rf_rate = 0.0421` or even better: `risk_free_rate = 0.0421`
+        * `rf` is not an industry accepted shorthand the way `df` is for a pandas DataFrame (and you should even be careful having df all over the place, it's better to have `df_risk_free`, for example)
+        * While you say what `rf` refers to in a comment the first time, you have `rf` in many places and it's pretty confusing.
+        * Honest to god my first thoughts were it is some sort of DataFrame, so in my head I was like "residual frame? reduced frame? retarded frame? risk frame?" before I just decided to scroll up and find it.
+
+    - If something is not EXPLICITLY clear, i.e. basic operation or very precise variable names, comment so others can understand.
+    *****************************************************************************************
+    - Python has an official method for explaining what a function or class will do, called docstrings, and they are incredibly simple and easy:
+        * Instead of commenting above a function with '#' and proceeding to do a little tiny synopsis, create a multi-line comment with """ """
+        * You will not be limited by having to fit your explanation in a single-line, tbh the more detailed/expressive you are about what you are trying to accomplish here means
+            less comments you have to have throughout the function.
+        * You can talk about the variables one can expect in this function and what their role is / type / original src
+        * Pressing Shift+Tab within a function calls up that functions docstring:
+            - Example: pd.DataFrame(*press Shift+Tab here*) -> little window pops up explaining the function, its parameters, return type, etc (very, very, very useful tbh)
+        * Reasons for doing this:
+            - Industry standard
+            - Increased functionality with previewing/etc
+            - Aesthetically pleasing, designed for this purpose.
+    *****************************************************************************************
+    - Type hints are also considered documentation, so these would be good to work in as well.
+
+
+CODE ORGANIZATION
+    - You NEED to organize the code more succintly, and there are different ways to do it.
+    - My approach, I like to make lots of separate files/modules/libraries for my codebase and I import them (in the standard way) together in JupyterLab.
+    - That way, the notebook is mostly data science output or drivers to get results rather than a bunch of code all over the place.
+        * A good way to think about any project you want others to use is "what do I want them to see/what do they not need to see."
+        * For example, idrc about how the Portfolio class is built, I just care about it working the way I want.
+        * Put that code in a module and import it and then the notebook decreases in size by a few dozen lines of code.
+        * !!! That way the attention is on all the cool stuff your coding did, not your actual coding !!!
+    - The other approach, which I caution against but you're your own person, is everything within a Notebook similar to how you have it, but following the standardized structure.
+        * There is an accepted data science format for notebooks.
+        * If you want to go this way, you'll need to look it up since I don't recall it exactly, but basically the order is:
+            -> imports at the top
+            -> any utility/helper functions used in later functions
+            -> any classes you made to help
+            -> driver code to use with the classes/methods,
+            -> the results, with clear labels.
+            * You're also expected to have plenty of Markdown cells explaining whats going on and what to expect in each section so the notebook is easily navigatable and understandable.*
+
+    - In your current form, you don't really follow any standards, not even your own, so you should really figure that out (I had the same issue for a while)
+    - The thing they set my hackles up immediately was the imports
+    - Imports ~almost~ always go at the top of the file, regardless of how deep within the code it takes for them to be called/used. Exceptions (which you should't encounter) include:
+        * Checking to see proper versioning / if library exists before actually calling import to prevent an ImportError.
+        * Needing to import something in a specific circumstance because of privacy issues (similar to above), a very common one you will see now a days:
+            
+            import os
+            .
+            .
+            .
+            OPEN_AI_KEY = None
+            if os.path.exists(os.path.join(os.getcwd(), 'open_ai_key.py')):
+                from .open_ai_key import OPEN_AI_KEY as key
+                OPEN_AI_KEY = key
+
+        * If your imports fall into neither of these categories (which yours do not), then all imports NEED to be at top.
+        * Not only industry standard, but also sus if you're importing deep within file for no reason.
+    - Also good to just let other people know, all at the top is pretty much saying "im gonna use all these at some point, letting you know now in case you're not familiar"
